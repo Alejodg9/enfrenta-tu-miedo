@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#080d17">
+  <title>Enfrentá tu miedo · Experiencia Riddikulus</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="app" id="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">✦</span><span>EL AULA DE LOS HECHIZOS <small>· EXPERIENCIA INTERACTIVA</small></span></div>
+      <button type="button" class="restart top-restart" id="restartButton" hidden>↺ <span>Volver al inicio</span></button>
+    </header>
+    <main id="main">
+      <section class="screen screen-cover active" data-screen="cover" aria-labelledby="cover-title">
+        <div class="scene-arches" aria-hidden="true"><i></i><i></i><i></i></div>
+        <div class="cover-ornament" aria-hidden="true">✧</div>
+        <div class="screen-inner centered hero-content">
+          <p class="eyebrow">UNA EXPERIENCIA SOBRE EL MIEDO Y LA IMAGINACIÓN</p>
+          <h1 id="cover-title">Enfrentá<br><em>tu miedo.</em></h1>
+          <div class="hairline"></div>
+          <p class="lede">A veces, lo que más nos asusta puede cambiar cuando aprendemos a mirarlo de otra manera.</p>
+          <button class="button button-primary" type="button" data-next="video">Comenzar <span aria-hidden="true">↗</span></button>
+          <p class="mini-caption">Una aventura breve. Un hechizo. Otra manera de mirar.</p>
+        </div>
+      </section>
+      <section class="screen" data-screen="video" aria-labelledby="video-title" hidden>
+        <div class="screen-inner narrow">
+          <p class="eyebrow">CAPÍTULO I <span class="dash"></span> EL ENCUENTRO</p>
+          <h2 id="video-title">¿Y si tu miedo<br><em>tomara forma?</em></h2>
+          <p class="body-copy">En el mundo mágico, un Boggart se transforma en aquello que más teme quien lo observa.</p>
+          <div class="video-shell" id="videoShell">
+            <video id="boggart-video" controls playsinline preload="metadata" poster="assets/video/portada.svg">
+              <source src="assets/video/bogart.mp4" type="video/mp4">
+              Tu navegador no admite video HTML5.
+            </video>
+            <button class="video-play-prompt" id="videoPlayPrompt" type="button" hidden>
+              Reproducir escena <span aria-hidden="true">▶</span>
+            </button>
+            <div class="video-missing" id="videoMissing" hidden role="status">
+              <span class="missing-glyph" aria-hidden="true">◇</span>
+              <strong>La escena está lista para proyectarse.</strong>
+              <span>No se pudo cargar <code>assets/video/bogart.mp4</code>.</span>
+            </div>
+          </div>
+          <div class="screen-footer"><span class="step">01 / 04</span><button type="button" class="button button-outline" data-next="explain">Continuar <span aria-hidden="true">→</span></button></div>
+        </div>
+      </section>
+      <section class="screen" data-screen="explain" aria-labelledby="explain-title" hidden>
+        <div class="screen-inner narrow">
+          <p class="eyebrow">CAPÍTULO II <span class="dash"></span> COMPRENDER</p>
+          <h2 id="explain-title">El miedo es real.<br><em>No siempre el peligro.</em></h2>
+          <div class="explain-grid">
+            <div class="rune-panel" aria-hidden="true">
+              <div class="rune-ring"><div class="mystic-eyes"><i></i><i></i></div></div>
+              <span>OBSERVAR · RESPIRAR · TRANSFORMAR</span>
+            </div>
+            <div class="explain-copy">
+              <p>Sentir miedo o ansiedad es una respuesta natural de nuestro cuerpo. A veces nos ayuda a estar atentos; otras veces, nuestra mente imagina amenazas más grandes de lo que son.</p>
+              <p>El Boggart representa esa sensación: nuestros temores parecen enormes cuando los tenemos enfrente.</p>
+              <p class="highlight-copy">En la historia, el hechizo <strong>Riddikulus</strong> cambia la forma del Boggart usando la imaginación y el humor.</p>
+            </div>
+          </div>
+          <div class="screen-footer"><span class="step">02 / 04</span><button type="button" class="button button-primary" data-next="spell">Preparar el hechizo <span aria-hidden="true">→</span></button></div>
+        </div>
+      </section>
+      <section class="screen spell-screen" data-screen="spell" aria-labelledby="spell-title" hidden>
+        <canvas id="particleCanvas" class="particle-canvas" aria-hidden="true"></canvas>
+        <div class="screen-inner centered spell-layout">
+          <div class="spell-state spell-reflect" id="spellReflect">
+            <p class="eyebrow">CAPÍTULO III <span class="dash"></span> LA TRANSFORMACIÓN</p>
+            <h2 id="spell-title">Imaginá tu<br><em>miedo.</em></h2>
+            <p class="body-copy">Pensá en algo que te asuste. Puede ser algo real, imaginario, grande o pequeño.</p>
+            <p class="reflection-copy">Tomate un momento para verlo en tu imaginación.</p>
+            <button class="button button-primary" id="imaginedButton" type="button">Ya lo imaginé <span aria-hidden="true">→</span></button>
+          </div>
+          <div class="spell-state spell-transform" id="spellTransform" hidden>
+            <p class="eyebrow">CAPÍTULO III <span class="dash"></span> LA TRANSFORMACIÓN</p>
+            <h2>Ahora imaginá<br><em>algo distinto.</em></h2>
+            <p class="body-copy">Transformá ese miedo en algo absurdo, pequeño, gracioso o inesperado.</p>
+            <button class="orb-button" id="orbButton" aria-label="Iniciar la transformación con Riddikulus" type="button"><span class="orb-halo"></span><span class="orb-progress"></span><span class="orb"></span><span class="orb-spark"></span></button>
+            <p class="orb-instruction" id="orbInstruction" aria-live="polite">CUANDO ESTÉS LISTO, TOCÁ LA ESFERA.</p>
+          </div>
+          <div class="spell-result" id="spellResult" hidden aria-live="polite">
+            <p class="result-kicker" id="resultKicker">EL MIEDO PUEDE CAMBIAR DE FORMA</p>
+            <h2 class="spell-word" id="spellWord">¡Riddikulus!</h2>
+            <p class="result-copy">Cuando imaginamos algo de otra manera, también puede cambiar lo que sentimos.</p>
+            <button class="button button-primary" id="spellContinue" type="button" data-next="paper" hidden>Continuar <span aria-hidden="true">→</span></button>
+          </div>
+          <span class="step spell-step">03 / 04</span>
+        </div>
+      </section>
+      <section class="screen paper-screen" data-screen="paper" aria-labelledby="paper-title" hidden>
+        <div class="screen-inner centered paper-layout">
+          <p class="eyebrow">CAPÍTULO IV <span class="dash"></span> TU TURNO</p>
+          <div class="paper-icon" aria-hidden="true"><svg viewBox="0 0 100 100" fill="none"><path d="M23 10H63L79 26V89H23V10Z" stroke="currentColor" stroke-width="2"/><path d="M63 10V26H79" stroke="currentColor" stroke-width="2"/><path d="M35 46H67M35 56H62M35 66H56" stroke="currentColor" stroke-width="2"/><path d="m58 81 21-32 7 5-21 32-10 4 3-9Z" fill="#a9e9ee" stroke="#a9e9ee" stroke-width="2"/></svg></div>
+          <h2 id="paper-title">Ahora la magia<br><em>está en tus manos.</em></h2>
+          <p class="lede">Tomá una hoja y dibujá algo que te dé miedo. Después transformalo: agregale algo gracioso, inesperado o que lo haga menos amenazante.</p>
+          <p class="paper-emphasis">No hace falta saber dibujar. Solo imaginar.</p>
+          <button type="button" class="button button-outline" id="finishRestart">↺ &nbsp; Listo, dejar para el siguiente</button>
+          <p class="mini-caption">Esta actividad se hace en papel, fuera de la pantalla.</p>
+          <span class="step paper-step">04 / 04</span>
+        </div>
+      </section>
+    </main>
+    <footer class="bottom-bar"><span>FERIA DE CIENCIAS · EXPERIENCIA EDUCATIVA</span><span>EL MIEDO TAMBIÉN PUEDE TRANSFORMARSE <b>✦</b></span></footer>
+  </div>
+  <div class="idle-prompt" id="idlePrompt" hidden role="status"><span>¿Seguís ahí? Volvemos al inicio en <strong id="countdown">15</strong> s.</span><button type="button" id="stayButton">Seguir acá</button></div>
+</body>
+</html>
