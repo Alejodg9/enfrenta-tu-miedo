@@ -7,7 +7,11 @@
   <meta name="theme-color" content="#080d17">
   <title>Enfrentá tu miedo · Experiencia Riddikulus</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="boggart.css">
+  <link rel="stylesheet" href="video.css">
+  <link rel="stylesheet" href="result.css">
   <script defer src="script.js"></script>
+  <script defer src="boggart-vapor.js"></script>
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -35,7 +39,7 @@
           <h2 id="video-title">¿Y si tu miedo<br><em>tomara forma?</em></h2>
           <p class="body-copy">En el mundo mágico, un Boggart se transforma en aquello que más teme quien lo observa.</p>
           <div class="video-shell" id="videoShell">
-            <video id="boggart-video" controls playsinline preload="metadata" poster="assets/video/portada.svg">
+            <video id="boggart-video" playsinline preload="metadata" poster="assets/video/portada.svg" disablepictureinpicture>
               <source src="assets/video/bogart.mp4" type="video/mp4">
               Tu navegador no admite video HTML5.
             </video>
@@ -57,13 +61,19 @@
           <h2 id="explain-title">El miedo es real.<br><em>No siempre el peligro.</em></h2>
           <div class="explain-grid">
             <div class="rune-panel" aria-hidden="true">
-              <div class="rune-ring"><div class="mystic-eyes"><i></i><i></i></div></div>
+              <div class="boggart-stage">
+                <canvas class="boggart-vapor boggart-vapor-back" aria-hidden="true"></canvas>
+                <span class="boggart-eye-glow"></span>
+                <img class="boggart-image" src="assets/images/boggart.webp" alt="">
+                <canvas class="boggart-vapor boggart-vapor-front" aria-hidden="true"></canvas>
+                <img class="boggart-eyes" src="assets/images/boggart.webp" alt="">
+              </div>
               <span>OBSERVAR · RESPIRAR · TRANSFORMAR</span>
             </div>
             <div class="explain-copy">
-              <p>Sentir miedo o ansiedad es una respuesta natural de nuestro cuerpo. A veces nos ayuda a estar atentos; otras veces, nuestra mente imagina amenazas más grandes de lo que son.</p>
-              <p>El Boggart representa esa sensación: nuestros temores parecen enormes cuando los tenemos enfrente.</p>
-              <p class="highlight-copy">En la historia, el hechizo <strong>Riddikulus</strong> cambia la forma del Boggart usando la imaginación y el humor.</p>
+              <p>El boggart aprende de tu mirada. En el mundo mágico un boggart se convierte en aquello que más miedo te da.</p>
+              <p>La ansiedad puede hacer algo parecido: toma una preocupación y la agranda hasta ocuparlo todo.</p>
+              <p class="highlight-copy">Pero hay un secreto: cuando cambias la forma de mirar aquello que te asusta, también puede cambiar su poder sobre vos.</p>
             </div>
           </div>
           <div class="screen-footer"><span class="step">02 / 04</span><button type="button" class="button button-primary" data-next="spell">Preparar el hechizo <span aria-hidden="true">→</span></button></div>

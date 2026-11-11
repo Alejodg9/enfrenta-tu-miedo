@@ -5,3 +5,7 @@ __pycache__/
 # Operating-system files
 .DS_Store
 Thumbs.db
+
+# Referencias de trabajo originales (no se publican ni versionan)
+/boggart-reference-01.webp
+/boggart-reference-02.webp

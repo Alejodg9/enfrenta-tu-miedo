@@ -1,0 +1,3 @@
+/* Resultado: Riddikulus → idea central → explicación y acción. */
+.spell-result.show-result .result-copy{opacity:0}
+.spell-result.show-result.show-copy .result-copy{opacity:1}

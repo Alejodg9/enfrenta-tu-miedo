@@ -23,6 +23,7 @@
   const spellTransform = document.getElementById('spellTransform');
   const spellResult = document.getElementById('spellResult');
   const resultKicker = document.getElementById('resultKicker');
+  const boggartStage = document.querySelector('.boggart-stage');
   let current = 'cover';
   let lastActivity = Date.now();
   let castTimer = null;
@@ -33,6 +34,38 @@
   let spellState = 'idle';
   let imaginationStarted = 0;
   let sequenceTimers = [];
+
+  // El seguimiento se interpola y solo afecta al contenedor visual del Boggart.
+  if (boggartStage && !REDUCED_MOTION && window.matchMedia('(hover: hover)').matches) {
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let boggartFrame = null;
+
+    const renderBoggart = () => {
+      currentX += (targetX - currentX) * 0.12;
+      currentY += (targetY - currentY) * 0.12;
+      boggartStage.style.setProperty('--boggart-x', `${currentX.toFixed(2)}px`);
+      boggartStage.style.setProperty('--boggart-y', `${currentY.toFixed(2)}px`);
+      if (Math.abs(targetX - currentX) > 0.05 || Math.abs(targetY - currentY) > 0.05) boggartFrame = requestAnimationFrame(renderBoggart);
+      else { currentX = targetX; currentY = targetY; boggartFrame = null; }
+    };
+
+    const moveBoggart = event => {
+      const bounds = boggartStage.getBoundingClientRect();
+      targetX = Math.max(-8, Math.min(8, ((event.clientX - bounds.left) / bounds.width - .5) * 16));
+      targetY = Math.max(-8, Math.min(8, ((event.clientY - bounds.top) / bounds.height - .5) * 16));
+      if (!boggartFrame) boggartFrame = requestAnimationFrame(renderBoggart);
+    };
+
+    boggartStage.addEventListener('pointermove', moveBoggart);
+    boggartStage.addEventListener('pointerleave', () => {
+      targetX = 0;
+      targetY = 0;
+      if (!boggartFrame) boggartFrame = requestAnimationFrame(renderBoggart);
+    });
+  }
 
   function showVideoPlayPrompt() {
     if (!missingVideo) videoPlayPrompt.hidden = false;
@@ -68,7 +101,7 @@
     spellTransform.hidden = true;
     spellTransform.classList.remove('entering', 'concluding');
     spellResult.hidden = true;
-    spellResult.classList.remove('show-kicker', 'show-result');
+    spellResult.classList.remove('show-kicker', 'show-result', 'show-copy');
     resultKicker.classList.remove('visible');
     spellWord.textContent = '¡Riddikulus!';
     spellWord.classList.remove('visible');
@@ -179,15 +212,19 @@
   function showResult() {
     if (spellState !== 'fireworks') return;
     spellResult.hidden = false;
-    spellResult.classList.add('show-kicker');
-    resultKicker.classList.add('visible');
+    spellResult.classList.add('show-result');
+    spellWord.classList.add('visible');
     schedule(() => {
       if (spellState !== 'fireworks') return;
-      spellResult.classList.add('show-result');
-      spellWord.classList.add('visible');
+      spellResult.classList.add('show-kicker');
+      resultKicker.classList.add('visible');
+    }, REDUCED_MOTION ? 250 : 900);
+    schedule(() => {
+      if (spellState !== 'fireworks') return;
+      spellResult.classList.add('show-copy');
       spellContinue.hidden = false;
       spellState = 'result';
-    }, REDUCED_MOTION ? 350 : 700);
+    }, REDUCED_MOTION ? 500 : 1550);
   }
 
   function startFireworks() {
