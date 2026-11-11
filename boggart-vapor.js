@@ -3,6 +3,7 @@
 
   const stage = document.querySelector('.boggart-stage');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const compactDevice = window.matchMedia('(max-width: 760px), (pointer: coarse)').matches;
   if (!stage || reducedMotion) return;
 
   const vertexSource = `
@@ -89,7 +90,12 @@
     return { gl, program, buffer, layer, position: gl.getAttribLocation(program, 'position'), resolution: gl.getUniformLocation(program, 'resolution'), time: gl.getUniformLocation(program, 'time'), layerUniform: gl.getUniformLocation(program, 'layer'), energy: gl.getUniformLocation(program, 'energy') };
   };
 
-  const layers = [...document.querySelectorAll('.boggart-vapor')].map((canvas, index) => createLayer(canvas, index)).filter(Boolean);
+  // En celulares una sola capa conserva el efecto y reduce a la mitad el trabajo
+  // de WebGL, evitando saltos al hacer scroll o rotar la pantalla.
+  const vaporCanvases = [...document.querySelectorAll('.boggart-vapor')];
+  const activeCanvases = compactDevice ? vaporCanvases.slice(0, 1) : vaporCanvases;
+  if (compactDevice) vaporCanvases.slice(1).forEach(canvas => { canvas.hidden = true; });
+  const layers = activeCanvases.map((canvas, index) => createLayer(canvas, index)).filter(Boolean);
   if (!layers.length) { stage.classList.add('no-webgl'); return; }
   stage.classList.add('has-vapor');
   let energy = 0;
@@ -98,7 +104,9 @@
 
   const resize = () => layers.forEach(item => {
     const rect = item.gl.canvas.getBoundingClientRect();
-    const scale = Math.min(window.devicePixelRatio || 1, 1.35, 560 / Math.max(rect.width, 1));
+    const densityLimit = compactDevice ? 1 : 1.35;
+    const widthLimit = compactDevice ? 380 : 560;
+    const scale = Math.min(window.devicePixelRatio || 1, densityLimit, widthLimit / Math.max(rect.width, 1));
     const width = Math.max(2, Math.round(rect.width * scale));
     const height = Math.max(2, Math.round(rect.height * scale));
     if (item.gl.canvas.width !== width || item.gl.canvas.height !== height) { item.gl.canvas.width = width; item.gl.canvas.height = height; }
@@ -117,6 +125,12 @@
 
   const active = () => document.visibilityState === 'visible' && stage.closest('.screen')?.classList.contains('active');
   const frame = now => {
+    if (compactDevice && now - last < 32) {
+      if (active()) requestAnimationFrame(frame);
+      else running = false;
+      return;
+    }
+    last = now;
     energy += ((stage.matches(':hover') ? 1 : 0) - energy) * .035;
     if (active()) layers.forEach(item => draw(item, now * .001));
     if (active()) requestAnimationFrame(frame);

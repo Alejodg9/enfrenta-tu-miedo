@@ -39,6 +39,18 @@ En Windows, usando Chrome instalado en la ubicación habitual:
 
 Para salir del modo kiosco: `Alt+F4` (Linux o Windows). Para volver a portada desde la app, botón «Volver al inicio» o tecla `Esc`.
 
+## Uso desde celulares
+
+La experiencia se adapta a teléfonos y tablets, tanto en orientación vertical como horizontal. Para usarla con internet, abrí la URL publicada en un navegador actualizado (Chrome, Safari, Firefox o Edge); no requiere instalación.
+
+- Los botones y la esfera tienen áreas táctiles amplias.
+- El video usa controles nativos y se reproduce dentro de la página. Si el navegador bloquea el inicio automático con audio, tocá «Reproducir escena».
+- Las pantallas con más contenido permiten desplazamiento vertical sin perder el botón para volver al inicio.
+- Se respetan las áreas seguras de celulares con notch y la preferencia del sistema para reducir animaciones.
+- El efecto animado del Boggart reduce su carga gráfica automáticamente en dispositivos táctiles.
+
+El video pesa aproximadamente 63 MB; para una visita con datos móviles conviene publicarlo optimizado o recomendar una conexión Wi-Fi.
+
 ## Publicación en GitHub Pages
 
 El proyecto está preparado para GitHub Pages sin compilación: las rutas de recursos son relativas y el flujo de `.github/workflows/deploy-pages.yml` se ejecuta manualmente desde la pestaña **Actions**.

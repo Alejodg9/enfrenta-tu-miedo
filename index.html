@@ -2,7 +2,7 @@
 <html lang="es-AR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="color-scheme" content="dark">
   <meta name="theme-color" content="#080d17">
   <title>Enfrentá tu miedo · Experiencia Riddikulus</title>
@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="boggart.css">
   <link rel="stylesheet" href="video.css">
   <link rel="stylesheet" href="result.css">
+  <link rel="stylesheet" href="mobile.css">
   <script defer src="script.js"></script>
   <script defer src="boggart-vapor.js"></script>
 </head>
@@ -39,7 +40,7 @@
           <h2 id="video-title">¿Y si tu miedo<br><em>tomara forma?</em></h2>
           <p class="body-copy">En el mundo mágico, un Boggart se transforma en aquello que más teme quien lo observa.</p>
           <div class="video-shell" id="videoShell">
-            <video id="boggart-video" playsinline preload="metadata" poster="assets/video/portada.svg" disablepictureinpicture>
+            <video id="boggart-video" aria-label="Escena del Boggart" playsinline controls preload="metadata" poster="assets/video/portada.svg" disablepictureinpicture controlslist="nodownload noplaybackrate">
               <source src="assets/video/bogart.mp4" type="video/mp4">
               Tu navegador no admite video HTML5.
             </video>

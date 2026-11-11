@@ -167,6 +167,8 @@
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
   window.addEventListener('resize', sizeCanvas);
+  window.addEventListener('orientationchange', sizeCanvas);
+  window.visualViewport?.addEventListener('resize', sizeCanvas);
   sizeCanvas();
 
   function burst(fireworks = false) {

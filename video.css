@@ -1,7 +1,4 @@
-/* Capítulo I: video flotante, sin marco ni controles nativos. */
+/* Capítulo I: video flotante con controles nativos accesibles. */
 .video-shell{border:0;background:transparent;box-shadow:none;overflow:visible;isolation:isolate}
 .video-shell:before{content:"";position:absolute;z-index:-1;inset:7% 5%;background:radial-gradient(ellipse at 50% 52%,rgba(76,142,163,.16),rgba(24,61,81,.08) 48%,transparent 75%);transform:scale(1.08);pointer-events:none}
-.video-shell video{border:0;outline:0;background:transparent;box-shadow:0 30px 90px rgba(1,5,12,.38);pointer-events:none}
-.video-shell video::-webkit-media-controls{display:none!important}
-.video-shell video::-webkit-media-controls-enclosure{display:none!important}
-.video-shell video::-webkit-media-controls-panel{display:none!important}
+.video-shell video{border:0;outline:0;background:transparent;box-shadow:0 30px 90px rgba(1,5,12,.38);pointer-events:auto}
