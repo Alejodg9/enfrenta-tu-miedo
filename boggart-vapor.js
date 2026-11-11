@@ -3,7 +3,7 @@
 
   const stage = document.querySelector('.boggart-stage');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const compactDevice = window.matchMedia('(max-width: 760px), (pointer: coarse)').matches;
+  const mobileIntensity = window.matchMedia('(max-width: 760px), (pointer: coarse)').matches ? 1.28 : 1;
   if (!stage || reducedMotion) return;
 
   const vertexSource = `
@@ -18,6 +18,7 @@
     uniform float time;
     uniform float layer;
     uniform float energy;
+    uniform float intensity;
 
     float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123); }
     float noise(vec2 p) {
@@ -62,7 +63,7 @@
       float eyeRight = exp(-88. * dot(p - vec2(.25, -.12), p - vec2(.25, -.12)));
       alpha *= 1. - max(eyeLeft, eyeRight) * .98;
       alpha *= 1. - smoothstep(.36, 1.34, length(p + warp * .12));
-      alpha = clamp(alpha * (layer < .5 ? 9.1 : 11.2), 0., .86);
+      alpha = clamp(alpha * (layer < .5 ? 9.1 : 11.2) * intensity, 0., .86);
       vec3 color = mix(vec3(.13, .27, .34), vec3(.53, .72, .76), clamp(detail * 1.22, 0., 1.));
       gl_FragColor = vec4(color, alpha);
     }
@@ -87,31 +88,18 @@
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-    return { gl, program, buffer, layer, position: gl.getAttribLocation(program, 'position'), resolution: gl.getUniformLocation(program, 'resolution'), time: gl.getUniformLocation(program, 'time'), layerUniform: gl.getUniformLocation(program, 'layer'), energy: gl.getUniformLocation(program, 'energy') };
+    return { gl, program, buffer, layer, position: gl.getAttribLocation(program, 'position'), resolution: gl.getUniformLocation(program, 'resolution'), time: gl.getUniformLocation(program, 'time'), layerUniform: gl.getUniformLocation(program, 'layer'), energy: gl.getUniformLocation(program, 'energy'), intensity: gl.getUniformLocation(program, 'intensity') };
   };
 
-  // En celulares se conserva la capa frontal: la capa trasera sola queda
-  // prácticamente oculta por la ilustración. Seguimos limitando resolución y
-  // FPS para mantener el costo bajo sin perder el humo visible.
-  const vaporCanvases = [...document.querySelectorAll('.boggart-vapor')]
-    .map((canvas, layer) => ({ canvas, layer }));
-  const activeCanvases = compactDevice ? vaporCanvases.slice(-1) : vaporCanvases;
-  const inactiveCanvases = compactDevice ? vaporCanvases.slice(0, -1) : [];
-  inactiveCanvases.forEach(({ canvas }) => { canvas.hidden = true; });
-  const layers = activeCanvases
-    .map(({ canvas, layer }) => createLayer(canvas, layer))
-    .filter(Boolean);
+  const layers = [...document.querySelectorAll('.boggart-vapor')].map((canvas, index) => createLayer(canvas, index)).filter(Boolean);
   if (!layers.length) { stage.classList.add('no-webgl'); return; }
   stage.classList.add('has-vapor');
   let energy = 0;
   let running = false;
-  let last = 0;
 
   const resize = () => layers.forEach(item => {
     const rect = item.gl.canvas.getBoundingClientRect();
-    const densityLimit = compactDevice ? 1 : 1.35;
-    const widthLimit = compactDevice ? 380 : 560;
-    const scale = Math.min(window.devicePixelRatio || 1, densityLimit, widthLimit / Math.max(rect.width, 1));
+    const scale = Math.min(window.devicePixelRatio || 1, 1.35, 560 / Math.max(rect.width, 1));
     const width = Math.max(2, Math.round(rect.width * scale));
     const height = Math.max(2, Math.round(rect.height * scale));
     if (item.gl.canvas.width !== width || item.gl.canvas.height !== height) { item.gl.canvas.width = width; item.gl.canvas.height = height; }
@@ -124,22 +112,16 @@
     gl.useProgram(item.program); gl.bindBuffer(gl.ARRAY_BUFFER, item.buffer);
     gl.enableVertexAttribArray(item.position); gl.vertexAttribPointer(item.position, 2, gl.FLOAT, false, 0, 0);
     gl.uniform2f(item.resolution, gl.canvas.width, gl.canvas.height);
-    gl.uniform1f(item.time, seconds); gl.uniform1f(item.layerUniform, item.layer); gl.uniform1f(item.energy, energy);
+    gl.uniform1f(item.time, seconds); gl.uniform1f(item.layerUniform, item.layer); gl.uniform1f(item.energy, energy); gl.uniform1f(item.intensity, mobileIntensity);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   };
 
   const active = () => document.visibilityState === 'visible' && stage.closest('.screen')?.classList.contains('active');
   const frame = now => {
-    if (compactDevice && now - last < 32) {
-      if (active()) requestAnimationFrame(frame);
-      else running = false;
-      return;
-    }
-    last = now;
     energy += ((stage.matches(':hover') ? 1 : 0) - energy) * .035;
     if (active()) layers.forEach(item => draw(item, now * .001));
     if (active()) requestAnimationFrame(frame);
-    else { running = false; }
+    else running = false;
   };
   const wake = () => { if (!running) { running = true; requestAnimationFrame(frame); } };
 
@@ -147,6 +129,7 @@
   observer.observe(stage);
   document.addEventListener('visibilitychange', wake);
   stage.addEventListener('pointerenter', wake);
-  resize(); wake();
+  resize();
+  wake();
   window.setInterval(() => { if (active()) wake(); }, 500);
 })();
