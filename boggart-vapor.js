@@ -90,12 +90,17 @@
     return { gl, program, buffer, layer, position: gl.getAttribLocation(program, 'position'), resolution: gl.getUniformLocation(program, 'resolution'), time: gl.getUniformLocation(program, 'time'), layerUniform: gl.getUniformLocation(program, 'layer'), energy: gl.getUniformLocation(program, 'energy') };
   };
 
-  // En celulares una sola capa conserva el efecto y reduce a la mitad el trabajo
-  // de WebGL, evitando saltos al hacer scroll o rotar la pantalla.
-  const vaporCanvases = [...document.querySelectorAll('.boggart-vapor')];
-  const activeCanvases = compactDevice ? vaporCanvases.slice(0, 1) : vaporCanvases;
-  if (compactDevice) vaporCanvases.slice(1).forEach(canvas => { canvas.hidden = true; });
-  const layers = activeCanvases.map((canvas, index) => createLayer(canvas, index)).filter(Boolean);
+  // En celulares se conserva la capa frontal: la capa trasera sola queda
+  // prácticamente oculta por la ilustración. Seguimos limitando resolución y
+  // FPS para mantener el costo bajo sin perder el humo visible.
+  const vaporCanvases = [...document.querySelectorAll('.boggart-vapor')]
+    .map((canvas, layer) => ({ canvas, layer }));
+  const activeCanvases = compactDevice ? vaporCanvases.slice(-1) : vaporCanvases;
+  const inactiveCanvases = compactDevice ? vaporCanvases.slice(0, -1) : [];
+  inactiveCanvases.forEach(({ canvas }) => { canvas.hidden = true; });
+  const layers = activeCanvases
+    .map(({ canvas, layer }) => createLayer(canvas, layer))
+    .filter(Boolean);
   if (!layers.length) { stage.classList.add('no-webgl'); return; }
   stage.classList.add('has-vapor');
   let energy = 0;
