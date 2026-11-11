@@ -13,5 +13,5 @@
 .explain-copy{max-width:455px}.explain-copy p{margin:0 0 20px;color:#d4dfe3;font-size:clamp(1.04rem,1.28vw,1.18rem);line-height:1.68}.explain-copy .highlight-copy{margin-bottom:0;color:#e7f5f3}.highlight-copy strong{color:inherit}
 @keyframes boggart-eye-idle{0%,100%{opacity:.11}50%{opacity:.2}}
 @media(max-width:760px){.explain-grid{gap:22px}.rune-panel{min-height:215px;gap:10px}.boggart-stage{width:min(100%,330px);height:175px}.rune-panel>span:last-child{width:min(92%,300px);padding-top:9px;font-size:8px}.explain-copy{max-width:none}.explain-copy p{font-size:1.03rem;line-height:1.62;margin-bottom:17px}}
-@media(max-width:760px),(pointer:coarse){.boggart-image{opacity:.96;filter:contrast(1.08) brightness(1.04)}.boggart-vapor-back,.boggart-vapor-front{opacity:1}}
+@media(max-width:760px),(pointer:coarse){.boggart-image{opacity:.96;filter:contrast(1.08) brightness(1.04)}}
 @media(prefers-reduced-motion:reduce){.boggart-stage{transform:none!important}.boggart-vapor{display:none}.boggart-eye-glow{animation:none!important;transition:none}}
